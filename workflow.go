@@ -21,6 +21,18 @@ func New() *Workflow {
 	return w
 }
 
+func (w *Workflow) AddSteps(steps []*Step) {
+	for _, s := range steps {
+		if w.Start == nil {
+			w.Start = s
+		}
+		if !w.inQueue[s] {
+			w.inQueue[s] = true
+			w.queue = append(w.queue, s)
+		}
+	}
+}
+
 func (w *Workflow) Run() error {
 	w.loadQueue(w.Start)
 	for _, step := range w.queue {
